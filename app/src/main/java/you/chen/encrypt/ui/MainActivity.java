@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.bt2).setOnClickListener(this);
         findViewById(R.id.bt3).setOnClickListener(this);
         findViewById(R.id.bt4).setOnClickListener(this);
+        findViewById(R.id.bt5).setOnClickListener(this);
     }
 
     @Override
@@ -38,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.bt4:
                 Test.testRsa();
+                break;
+            case R.id.bt5:
+                Test.createRsaKey();
                 break;
         }
     }

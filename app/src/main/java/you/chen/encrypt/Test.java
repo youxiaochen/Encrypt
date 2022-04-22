@@ -90,6 +90,11 @@ public final class Test {
         }
     }
 
+    public static void createRsaKey() {
+        String keys = Encrypts.createRsaKey();
+        LogUtils.i(keys);
+    }
+
     //自动生成名字（中文）
     public static String getRandomJianHan(int len) {
         Random random = new Random();

@@ -53,8 +53,8 @@ public final class Encrypts {
     public native static String rsaEncrypt(String data);
     public native static String rsaDecrypt(String data);
 
-
-    public native static String eccEncrypt(String data, String key);
-
-    public native static void test(String path);
+    /**
+     * 生成RSA 公私钥, JNI生成的PEM格式的, Java层不能直接使用,需要转换, Service中已经实现
+     */
+    public native static String createRsaKey();
 }
