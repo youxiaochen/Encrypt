@@ -1,5 +1,6 @@
 #include <jni.h>
 #include <string>
+#include <assert.h>
 
 #include "Log.h"
 #include "BASE64Code.h"
