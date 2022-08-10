@@ -132,7 +132,7 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
     }
     jclass javaLogClass = env->FindClass(javaEncryptsClassName);
     assert(javaLogClass != NULL);
-    if (!env->RegisterNatives(javaLogClass, gMethods, sizeof(gMethods) / sizeof(gMethods[0])) < 0) {
+    if (env->RegisterNatives(javaLogClass, gMethods, sizeof(gMethods) / sizeof(gMethods[0])) < 0) {
         return JNI_ERR;
     }
     env->DeleteLocalRef(javaLogClass);
