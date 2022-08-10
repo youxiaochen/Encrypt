@@ -89,7 +89,7 @@ static jstring aes_decrypt(JNIEnv *env, jclass clazz, jstring _data, jstring _ke
 static jstring rsa_encrypt(JNIEnv *env, jclass clazz, jstring _data) {
     const char *data = env->GetStringUTFChars(_data, JNI_FALSE);
     string rsa_ret = RSACrypto::encrypt((unsigned char *) data, strlen(data),
-            (const unsigned char *) PUBLICKEY, strlen(PUBLICKEY));
+                                        (const unsigned char *) PUBLICKEY, strlen(PUBLICKEY));
     string result = BASE64Code::encode(rsa_ret.c_str(), rsa_ret.length());
     env->ReleaseStringUTFChars(_data, data);
     return env->NewStringUTF(result.c_str());
@@ -99,7 +99,7 @@ static jstring rsa_decrypt(JNIEnv *env, jclass clazz, jstring _data) {
     const char *data = env->GetStringUTFChars(_data, JNI_FALSE);
     string base_data = BASE64Code::decode(data, strlen(data));
     string rsa_ret = RSACrypto::decrypt((unsigned char *) base_data.c_str(), base_data.length(),
-            (const unsigned char *) PRIVATE_KEY, strlen(PRIVATE_KEY));
+                                        (const unsigned char *) PRIVATE_KEY, strlen(PRIVATE_KEY));
     env->ReleaseStringUTFChars(_data, data);
     return env->NewStringUTF(rsa_ret.c_str());
 }
@@ -122,20 +122,16 @@ JNINativeMethod gMethods[] = {
         {"aesDecrypt",    "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;", (void *) aes_decrypt},
         {"rsaEncrypt",    "(Ljava/lang/String;)Ljava/lang/String;",                                     (void *) rsa_encrypt},
         {"rsaDecrypt",    "(Ljava/lang/String;)Ljava/lang/String;",                                     (void *) rsa_decrypt},
-        {"createRsaKey",    "()Ljava/lang/String;",                                                     (void *) create_rsa_keys}
+        {"createRsaKey",  "()Ljava/lang/String;",                                                       (void *) create_rsa_keys}
 };
 
 extern "C" JNIEXPORT jint JNICALL
 JNI_OnLoad(JavaVM *vm, void *reserved) {
     JNIEnv *env = NULL;
-    if ((vm)->GetEnv((void **) &env, JNI_VERSION_1_4) != JNI_OK) {
-        return JNI_ERR;
-    }
+    if ((vm)->GetEnv((void **) &env, JNI_VERSION_1_4) != JNI_OK) return JNI_ERR;
     jclass javaLogClass = env->FindClass(javaEncryptsClassName);
-    assert(javaLogClass != NULL);
-    if (env->RegisterNatives(javaLogClass, gMethods, sizeof(gMethods) / sizeof(gMethods[0])) < 0) {
-        return JNI_ERR;
-    }
+    jint registerRes = env->RegisterNatives(javaLogClass, gMethods, sizeof(gMethods) / sizeof(gMethods[0]));
     env->DeleteLocalRef(javaLogClass);
+    if (registerRes < 0) return JNI_ERR;
     return JNI_VERSION_1_4;
 }
